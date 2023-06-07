@@ -1,9 +1,10 @@
-import EmployeeAdd from './EmployeeAdd.js'
-class EmployeeFilter extends React.Component {
-    render() {
-        return(<div>This is a placeholder for the Employee Filter.</div>)
-    }
-}
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import EmployeeAdd from './EmployeeAdd.jsx'
+import EmployeeFilter from './EmployeeFilter.jsx'
+// import EmployeeList from './EmployeeList.jsx'
+
+const root = createRoot(document.getElementById('content'))
 
 function EmployeeTable(props)  {
     const employeeRows = props.employees.map(employee =>
@@ -48,7 +49,6 @@ function EmployeeRow(props) {
         </tr>
     )
 }
-
 class EmployeeList extends React.Component {
     constructor() {
         super()
@@ -80,9 +80,9 @@ class EmployeeList extends React.Component {
         .then(response => response.json())
         .then(newEmployee => {
             newEmployee.employee.dateHired = new Date(newEmployee.employee.dateHired)
-            const newEmployees = this.state.employees.concat(newEmployee.employee)
+            const newEmployees = this.state.employees.concat(newEmployees.employee)
             this.setState({employees: newEmployees})
-            console.log('Total count of employees', newEmployee.length)
+            console.log('Total count of employees:', newEmployees.length)
         })
         .catch(err => {console.log(err)})
     
@@ -105,15 +105,14 @@ class EmployeeList extends React.Component {
                     <hr/>
                     <EmployeeTable employees={this.state.employees} deleteEmployee={this.deleteEmployee} />
                     <hr/>
-                    <EmployeeAdd createEmployee = {this.createEmployee}/>
+                    <EmployeeAdd createEmployee = {this.createEmployee} />
             </React.Fragment>
         )
     }
 }
 
-ReactDOM.render(
+root.render(
     <React.StrictMode>
         <EmployeeList/>
-    </React.StrictMode>,
-    document.getElementById('content')
+    </React.StrictMode>
 )

@@ -1,14 +1,167 @@
-class EmployeeFilter extends React.Component {
+// let ryan = 'Ryan King'
+// let sally = 'Sally Smith'
+// let john = 'John Doe'
+// let amol = 'Amol Shookup'
+// let robin = 'Robin Banks'
+// let justin = 'Justin Tyme'
+// let chris = 'Chris Columbus'
+// let amanda = 'Amanda Bynes'
+
+// const element = (
+
+//         <ul style = {{'color': 'blue', 'fontSize': '24px'}}>
+//             <li>{ryan}</li>
+//             <li>{sally}</li>
+//             <li>{john}</li>
+//             <li>{amol}</li>
+//             <li>{robin}</li>
+//             <li>{justin}</li>
+//             <li>{chris}</li>
+//             <li>{amanda}</li>
+//         </ul>
+
+//     )
+
+// ReactDOM.render(element, document.getElementById('content'))
+
+// // Sample function component
+// function Welcome(props) {
+//     return <h1>Hello, {props.name}</h1>
+// }
+// ReactDOM.render(<Welcome name = 'Ryan King' />, document.getElementById('content'))
+
+// Sample class component
+
+const initialEmployees = [{
+    id: 1,
+    name: 'Ryan King',
+    ext: '1124',
+    email: 'ryan13king@gmail.com',
+    title: 'Escrow Officer',
+    dateHired: new Date('2018-08-15'),
+    isEmployed: true
+  }, {
+    id: 2,
+    name: 'Sally',
+    ext: '1125',
+    email: 'sally@gmail.com',
+    title: 'Director of Sales',
+    dateHired: new Date('2015-01-03'),
+    isEmployed: true
+  }];
+  
+  // const sampleEmployee = {
+  //     name: 'Holly Unlikely',
+  //     ext: 1126,
+  //     email: 'holly@vectacorp.com',
+  //     title: 'Director of Marketing',
+  //     dateHired: new Date('2019-03-04'),
+  //     isEmployed: true,
+  // }
+  // class BorderWrap extends React.Component {
+  //     render() {
+  //         const borderStyle = {border: "3px solid silver",
+  //         padding: 6}
+  //         return(
+  //             <div style={borderStyle}>
+  //                 {this.props.children}
+  //             </div>
+  //         )
+  
+  //     }
+  // }
+  
+  class EmployeeFilter extends React.Component {
     render() {
-        return React.createElement("div", null, "This is a placeholder for the Employee Filter.");
+      return /*#__PURE__*/React.createElement("div", null, "This is a placeholder for the Employee Filter.");
     }
-}
-function EmployeeTable(props) {
-    const employeeRows = props.employees.map(employee => React.createElement(EmployeeRow, {
-        key: employee._id,
-        employee: employee,
-        deleteEmployee: props.deleteEmployee
-        }));
-        return React.createElement("table", {
-            className: "bordered-table"
-            }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Name"), React.createElement(\"th\", null, \"Extension\"), /*#__PURE__*/React.createElement(\"th\", null, \"Email\"), /*#__PURE__*/React.createElement(\"th\", null, \"Title\"), /*#__PURE__*/React.createElement(\"th\", null, \"Date Hired\"), /*#__PURE__*/React.createElement(\"th\", null, \"Currently Employed?\"), /*#__PURE__*/React.createElement(\"th\", null))), /*#__PURE__*/React.createElement(\"tbody\", null, employeeRows));\n}\nfunction EmployeeRow(props) {\n  function onDeleteClick() {\n    props.deleteEmployee(props.employee._id);\n  }\n  return /*#__PURE__*/React.createElement(\"tr\", null, /*#__PURE__*/React.createElement(\"td\", null, props.employee.name), /*#__PURE__*/React.createElement(\"td\", null, props.employee.extension), /*#__PURE__*/React.createElement(\"td\", null, props.employee.email), /*#__PURE__*/React.createElement(\"td\", null, props.employee.title), /*#__PURE__*/React.createElement(\"td\", null, props.employee.dateHired.toDateString()), /*#__PURE__*/React.createElement(\"td\", null, props.employee.currentlyEmployed ? 'Yes' : 'No'), /*#__PURE__*/React.createElement(\"td\", null, /*#__PURE__*/React.createElement(\"button\", {\n    onClick: onDeleteClick\n  }, \"DELETE\")));\n}\nclass EmployeeAdd extends React.Component {\n  constructor() {\n    super();\n    this.handleSubmit = this.handleSubmit.bind(this);\n  }\n  handleSubmit(e) {\n    e.preventDefault();\n    const form = document.forms.employeeAdd;\n    const employee = {\n      name: form.name.value,\n      extension: form.ext.value,\n      email: form.email.value,\n      title: form.title.value\n    };\n    this.props.createEmployee(employee);\n    form.name.value = '';\n    form.ext.value = '';\n    form.email.value = '';\n    form.title.value = '';\n  }\n  render() {\n    return /*#__PURE__*/React.createElement(\"form\", {\n      name: \"employeeAdd\",\n      onSubmit: this.handleSubmit\n    }, \"Name: \", /*#__PURE__*/React.createElement(\"input\", {\n      type: \"text\",\n      name: \"name\"\n    }), /*#__PURE__*/React.createElement(\"br\", null), \"Extension: \", /*#__PURE__*/React.createElement(\"input\", {\n      type: \"text\",\n      name: \"ext\",\n      maxLength: 4\n    }), /*#__PURE__*/React.createElement(\"br\", null), \"Email: \", /*#__PURE__*/React.createElement(\"input\", {\n      type: \"text\",\n      name: \"email\"\n    }), /*#__PURE__*/React.createElement(\"br\", null), \"Title: \", /*#__PURE__*/React.createElement(\"input\", {\n      type: \"text\",\n      name: \"title\"\n    }), /*#__PURE__*/React.createElement(\"br\", null), /*#__PURE__*/React.createElement(\"button\", null, \"Add\"));\n  }\n}\nclass EmployeeList extends React.Component {\n  constructor() {\n    super();\n    this.state = {\n      employees: []\n    };\n    this.createEmployee = this.createEmployee.bind(this);\n    this.deleteEmployee = this.deleteEmployee.bind(this);\n  }\n  componentDidMount() {\n    this.loadData();\n  }\n  loadData() {\n    fetch('/api/employees').then(response => response.json()).then(data => {\n      console.log('Total count of employees:', data.count);\n      data.employees.forEach(employee => {\n        employee.dateHired = new Date(employee.dateHired);\n      });\n      this.setState({\n        employees: data.employees\n      });\n    }).catch(err => {\n      console.log(err);\n    });\n  }\n  createEmployee(employee) {\n    fetch('/api/employees', {\n      method: 'POST',\n      headers: {\n        'Content-Type': 'application/json'\n      },\n      body: JSON.stringify(employee)\n    }).then(response => response.json()).then(newEmployee => {\n      newEmployee.employee.dateHired = new Date(newEmployee.employee.dateHired);\n      const newEmployees = this.state.employees.concat(newEmployee.employee);\n      this.setState({\n        employees: newEmployees\n      });\n      console.log('Total count of employees', newEmployee.length);\n    }).catch(err => {\n      console.log(err);\n    });\n  }\n  deleteEmployee(id) {\n    fetch(`/api/employees/${id}`, {\n      method: 'DELETE'\n    }).then(response => {\n      if (!response.ok) {\n        console.log('Failed to delete employee.');\n      } else {\n        this.loadData();\n      }\n    });\n  }\n  render() {\n    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(\"h1\", null, \"Employee Management Application\"), /*#__PURE__*/React.createElement(EmployeeFilter, null), /*#__PURE__*/React.createElement(\"hr\", null), /*#__PURE__*/React.createElement(EmployeeTable, {\n      employees: this.state.employees,\n      deleteEmployee: this.deleteEmployee\n    }), /*#__PURE__*/React.createElement(\"hr\", null), /*#__PURE__*/React.createElement(EmployeeAdd, {\n      createEmployee: this.createEmployee\n    }));\n  }\n}\nReactDOM.render( /*#__PURE__*/React.createElement(React.StrictMode, null, /*#__PURE__*/React.createElement(EmployeeList, null)), document.getElementById('content'));\n\n//# sourceURL=webpack://comp-693-m1-exercise/./public/employees.js?");
+  }
+  function EmployeeTable(props) {
+    const employeeRows = props.employees.map(employee => /*#__PURE__*/React.createElement(EmployeeRow, {
+      key: employee.id,
+      employee: employee
+    }));
+    return /*#__PURE__*/React.createElement("table", {
+      className: "bordered-table"
+    }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "ID"), /*#__PURE__*/React.createElement("th", null, "Name"), /*#__PURE__*/React.createElement("th", null, "Extension"), /*#__PURE__*/React.createElement("th", null, "Email"), /*#__PURE__*/React.createElement("th", null, "Title"), /*#__PURE__*/React.createElement("th", null, "Date Hired"), /*#__PURE__*/React.createElement("th", null, "Currently Employed?"))), /*#__PURE__*/React.createElement("tbody", null, employeeRows));
+  }
+  function EmployeeRow(props) {
+    const employee = props.employee;
+    return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, employee.id), /*#__PURE__*/React.createElement("td", null, employee.name), /*#__PURE__*/React.createElement("td", null, employee.ext), /*#__PURE__*/React.createElement("td", null, employee.email), /*#__PURE__*/React.createElement("td", null, employee.title), /*#__PURE__*/React.createElement("td", null, employee.dateHired.toDateString()), /*#__PURE__*/React.createElement("td", null, employee.isEmployed ? 'Yes' : 'No'));
+  }
+  class EmployeeAdd extends React.Component {
+    constructor() {
+      super();
+      this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    handleSubmit(e) {
+      e.preventDefault();
+      const form = document.forms.employeeAdd;
+      const employee = {
+        name: form.name.value,
+        ext: form.ext.value,
+        email: form.email.value,
+        title: form.title.value,
+        dateHired: new Date(),
+        isEmployed: true
+      };
+      this.props.createEmployee(employee);
+      form.name.value = '';
+      form.ext.value = '';
+      form.email.value = '';
+      form.title.value = '';
+    }
+    render() {
+      return /*#__PURE__*/React.createElement("form", {
+        name: "employeeAdd",
+        onSubmit: this.handleSubmit
+      }, "Name: ", /*#__PURE__*/React.createElement("input", {
+        type: "text",
+        name: "name"
+      }), /*#__PURE__*/React.createElement("br", null), "Extension: ", /*#__PURE__*/React.createElement("input", {
+        type: "text",
+        name: "ext"
+      }), /*#__PURE__*/React.createElement("br", null), "Email: ", /*#__PURE__*/React.createElement("input", {
+        type: "text",
+        name: "email"
+      }), /*#__PURE__*/React.createElement("br", null), "Title: ", /*#__PURE__*/React.createElement("input", {
+        type: "text",
+        name: "title"
+      }), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("button", null, "Add"));
+    }
+  }
+  class EmployeeList extends React.Component {
+    constructor() {
+      super();
+      this.state = {
+        employees: []
+      };
+      this.createEmployee = this.createEmployee.bind(this);
+    }
+    componentDidMount() {
+      this.loadData();
+    }
+    loadData() {
+      setTimeout(() => {
+        this.setState({
+          employees: initialEmployees
+        });
+      }, 500);
+    }
+    createEmployee(employee) {
+      employee.id = this.state.employees.length + 1;
+      const newEmployeeList = this.state.employees.slice();
+      newEmployeeList.push(employee);
+      this.setState({
+        employees: newEmployeeList
+      });
+    }
+    render() {
+      return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Employee Management Application"), /*#__PURE__*/React.createElement(EmployeeFilter, null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(EmployeeTable, {
+        employees: this.state.employees
+      }), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(EmployeeAdd, {
+        createEmployee: this.createEmployee
+      }));
+    }
+  }
+  ReactDOM.render( /*#__PURE__*/React.createElement(React.StrictMode, null, /*#__PURE__*/React.createElement(EmployeeList, null)), document.getElementById('content'));
